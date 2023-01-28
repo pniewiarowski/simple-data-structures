@@ -1,1 +1,1 @@
-# Just data structures :C
+# Just simple data structures :C
