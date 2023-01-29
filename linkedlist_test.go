@@ -128,3 +128,54 @@ func TestGetFirst(t *testing.T) {
 		t.Errorf("returns not corrected first value")
 	}
 }
+
+func TestGetLast(t *testing.T) {
+	testClass := NewLinkedList[int]()
+	size := 10
+	var lastVal int
+
+	for i := 0; i < size; i++ {
+		if i == size {
+			lastVal = i * i
+		}
+
+		testClass.Add(i * i)
+	}
+
+	if testClass.Get(0) != lastVal {
+		t.Errorf("returns not corrected first value")
+	}
+}
+
+func TestGetNode(t *testing.T) {
+	testClass := NewLinkedList[int]()
+
+	testClass.Add(5)
+	testClass.Add(5)
+	testClass.Add(5)
+
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("node should panic, if index value is less than 0 or greather than size of collection")
+		}
+	}()
+
+	testClass.getNode(-1)
+	testClass.getNode(3)
+}
+
+func TestGetLastNode(t *testing.T) {
+	testClass := NewLinkedList[int]()
+
+	testClass.Add(1)
+	testClass.Add(2)
+	testClass.Add(3)
+
+	if testClass.getLastNode().val != 3 {
+		t.Errorf("missmatch value")
+	}
+
+	if testClass.getLastNode().next != nil {
+		t.Errorf("getLastNode does not return last node")
+	}
+}
