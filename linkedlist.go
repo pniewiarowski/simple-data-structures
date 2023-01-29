@@ -44,10 +44,18 @@ func (ll *linkedList[T]) Empty() bool {
 	return ll.Size() == 0
 }
 
+// Clear linked list, that operation remove all elements
+// by setting head of the list to pointing to nothing, also
+// change size of structure to zero.
+func (ll *linkedList[T]) Clear() {
+	ll.head = nil
+	ll.size = 0
+}
+
 // Add value as a last element in structure, after that
 // operation should increase size by one.
 func (ll *linkedList[T]) Add(val T) {
-	if ll.Size() == 0 {
+	if ll.Empty() {
 		ll.head = newNode(val)
 		ll.size += 1
 		return
@@ -96,7 +104,40 @@ func (ll *linkedList[T]) GetFirst() T {
 // GetLast value from node at last index. That operation
 // does not change size of whole structure.
 func (ll *linkedList[T]) GetLast() T {
-	return ll.Get(ll.Size())
+	return ll.Get(ll.Size() - 1)
+}
+
+// Remove value with node at given index. That operation
+// should decrease size by one, function also panic if
+// structure is empty or given index is out of range.
+func (ll *linkedList[T]) Remove(idx int) {
+	if ll.Empty() {
+		panic("index out of range")
+	}
+
+	if idx == 0 {
+		ll.head = ll.head.next
+		ll.size -= 1
+
+		return
+	}
+
+	prev := ll.getNode(idx - 1)
+	curr := prev.next
+	next := curr.next
+
+	prev.next = next
+	ll.size -= 1
+}
+
+// Remove value with node at given index and returns it. That
+// operation should decrease size by one, function also panic if
+// structure is empty or given index is out of range.
+func (ll *linkedList[T]) Pop(idx int) T {
+	val := ll.Get(idx)
+	ll.Remove(idx)
+
+	return val
 }
 
 // getNode return node at given index, if collection is empty

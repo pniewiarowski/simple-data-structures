@@ -58,6 +58,20 @@ func TestEmpty(t *testing.T) {
 	}
 }
 
+func TestClear(t *testing.T) {
+	testClass := NewLinkedList[int]()
+
+	testClass.Add(1)
+	testClass.Add(2)
+	testClass.Add(3)
+
+	testClass.Clear()
+
+	if !testClass.Empty() || testClass.head != nil {
+		t.Errorf("linkedlist is not empty after clear operation")
+	}
+}
+
 func TestAdd(t *testing.T) {
 	testClass := NewLinkedList[int]()
 	size := 10
@@ -124,26 +138,72 @@ func TestGetFirst(t *testing.T) {
 		testClass.Add(i * i)
 	}
 
-	if testClass.Get(0) != firstVal {
-		t.Errorf("returns not corrected first value")
+	if testClass.GetFirst() != firstVal {
+		t.Errorf("get first operation return not correct value")
 	}
 }
 
 func TestGetLast(t *testing.T) {
 	testClass := NewLinkedList[int]()
 	size := 10
-	var lastVal int
+	var lastValue int
 
 	for i := 0; i < size; i++ {
-		if i == size {
-			lastVal = i * i
+		if i == size-1 {
+			lastValue = i * i
 		}
 
 		testClass.Add(i * i)
 	}
 
-	if testClass.Get(0) != lastVal {
-		t.Errorf("returns not corrected first value")
+	if testClass.GetLast() != lastValue {
+		t.Errorf("get last return not correct value")
+	}
+}
+
+func TestRemove(t *testing.T) {
+	testClass := NewLinkedList[int]()
+	wants := []int{}
+	size := 10
+
+	for i := 0; i < size; i++ {
+		testClass.Add(i * i)
+		wants = append(wants, i*i)
+	}
+
+	for i := 0; i < size/2; i++ {
+		testClass.Remove(0)
+	}
+
+	if testClass.GetLast() != wants[size-1] ||
+		testClass.GetFirst() != wants[size/2] {
+		t.Errorf("after remove operation list contains not valid data")
+	}
+
+	if testClass.Size() != size/2 {
+		t.Errorf("after remove operation list size is not correct")
+	}
+}
+
+func TestPop(t *testing.T) {
+	testClass := NewLinkedList[int]()
+	wants := []int{}
+	size := 10
+
+	for i := 0; i < size; i++ {
+		testClass.Add(i * i)
+		wants = append(wants, i*i)
+	}
+
+	lastVal := testClass.GetLast()
+	firstVal := testClass.GetFirst()
+
+	if testClass.Pop(0) != firstVal || testClass.Pop(testClass.Size()-1) != lastVal {
+		t.Errorf("pop operations return not valid data")
+	}
+
+	if testClass.Size() != size-2 {
+		t.Errorf("after pop operations size of structure is not correct")
 	}
 }
 
