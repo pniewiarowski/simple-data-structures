@@ -1,14 +1,15 @@
 package simpledatastructures
 
-// node for linked list, contains value
-// and next element in that structure.
+// node is a structure for contains value and
+// next node, to create linked list.
 type node[T any] struct {
 	val  T
 	next *node[T]
 }
 
-// newNode constructor initialize node with inserted
-// value and pointing to nothing.
+// newNode is constructor that initialize node with
+// inserted value. newNode return node that point to
+// nothing.
 func newNode[T any](val T) *node[T] {
 	return &node[T]{
 		val:  val,
@@ -16,14 +17,15 @@ func newNode[T any](val T) *node[T] {
 	}
 }
 
-// linkedList contains head of structure and number of
-// elements inside.
+// linkedList is a structure that contains node head and
+// follow size of structure.
 type linkedList[T any] struct {
 	head *node[T]
 	size int
 }
 
-// NewLinkedList constructor initialize empty linked list.
+// NewLinkedList is constructor that initialize empty
+// linked list.
 func NewLinkedList[T any]() *linkedList[T] {
 	return &linkedList[T]{
 		head: nil,
@@ -31,17 +33,19 @@ func NewLinkedList[T any]() *linkedList[T] {
 	}
 }
 
-// Size return how many element linked list currently contains.
+// Size return how many elements list acctually contains.
 func (ll *linkedList[T]) Size() int {
 	return ll.size
 }
 
-// Empty return if linekd list is currently empty.
+// Empty return boolean value, true if linkedlist is
+// empty and false if it is not.
 func (ll *linkedList[T]) Empty() bool {
 	return ll.Size() == 0
 }
 
-// Add value as a last element in linked list.
+// Add value as a last element in structure, after that
+// operation should increase size by one.
 func (ll *linkedList[T]) Add(val T) {
 	if ll.Size() == 0 {
 		ll.head = newNode(val)
@@ -53,12 +57,16 @@ func (ll *linkedList[T]) Add(val T) {
 	ll.size += 1
 }
 
-// AddTo add value on given index.
+// AddTo add value to given index inside structure,
+// panic if given index is out of range, that operation
+// should increase size by one.
 func (ll *linkedList[T]) AddTo(val T, idx int) {
 	if idx == 0 {
 		curr := ll.head
 		ll.head = newNode(val)
 		ll.head.next = curr
+
+		ll.size += 1
 
 		return
 	}
@@ -73,14 +81,26 @@ func (ll *linkedList[T]) AddTo(val T, idx int) {
 	ll.size += 1
 }
 
-// Get return element on given index in linked list,
-// or panic if given index is out of range.
+// Get value from node at given index. That operation
+// does not change size of whole structure.
 func (ll *linkedList[T]) Get(idx int) T {
 	return ll.getNode(idx).val
 }
 
-// getNode return pointer to node on given index,
-// or panic if given index is out of range.
+// GetFirst value from node at index zero. That operation
+// does not change size of whole structure.
+func (ll *linkedList[T]) GetFirst() T {
+	return ll.Get(0)
+}
+
+// GetLast value from node at last index. That operation
+// does not change size of whole structure.
+func (ll *linkedList[T]) GetLast() T {
+	return ll.Get(ll.Size())
+}
+
+// getNode return node at given index, if collection is empty
+// or index is out of range, function call panic.
 func (ll *linkedList[T]) getNode(idx int) *node[T] {
 	if ll.Empty() || idx >= ll.Size() || idx < 0 {
 		panic("index out of range")
@@ -96,7 +116,8 @@ func (ll *linkedList[T]) getNode(idx int) *node[T] {
 	return n
 }
 
-// getLastNode return node on last index.
+// getLastNode return node at last index, if collection is
+// empty, function call panic.
 func (ll *linkedList[T]) getLastNode() *node[T] {
 	return ll.getNode(ll.Size() - 1)
 }
